@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Spinner -->
+<div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+
+<!-- Page Header -->
+<div class="container-fluid page-header py-5">
+    <h1 class="text-center text-white display-6">Checkout</h1>
+    <ol class="breadcrumb justify-content-center mb-0">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active text-white">Checkout</li>
+    </ol>
+</div>
+
+<!-- Checkout Content -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Check Out</h1>
+
+        {% if cart_items %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="table-responsive mb-4">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td>
+                                <img src="{{ item.product.image.url }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
+                            </td>
+                            <td class="py-5">{{ item.product.name }}</td>
+                            <td class="py-5">₹{{ item.product.price }}</td>
+                            <td class="py-5">{{ item.quantity }}</td>
+                            <td class="py-5">₹{{ item.total }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="4" class="text-end fw-bold">Shipping</td>
+                            <td>₹3.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-end fw-bold">Total</td>
+                            <td><strong>₹{{ grand_total }}</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Place Order Button -->
+            <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
+                    Place Order
+                </button>
+            </div>
+        </form>
+        {% else %}
+            <p class="text-danger">Your cart is empty. <a href="{% url 'shop' %}">Shop now</a>.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

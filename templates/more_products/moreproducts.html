@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container py-5">
+
+    {% if query %}
+        <h3>Search results for "{{ query }}"</h3>
+        {% if results %}
+            <div class="row">
+                {% for product in results %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">₹<span class="unit-price">{{ product.price }}</span> per item</p>
+
+                                <label for="quantity-{{ product.id }}">Quantity:</label>
+                                <select class="form-select quantity-select" id="quantity-{{ product.id }}" data-price="{{ product.price }}">
+                                    {% for i in 1|to_range:10 %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+
+                                <p class="fw-bold mt-2">Total: ₹<span class="total-price">{{ product.price }}</span></p>
+
+                                <a href="#" class="btn btn-warning w-100 my-2">Add to Cart</a>
+                                <a href="#" class="btn btn-orange w-100">Buy Now</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No matching products found.</p>
+        {% endif %}
+
+    {% else %}
+        <!-- Show full category listing if not searching -->
+        <h2>Vegetables</h2>
+        <div class="row">
+            {% for product in vegetables %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p>{{ product.description|truncatewords:10 }}</p>
+                            <p class="fw-bold">₹{{ product.price }}</p>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Fruits</h2>
+        <div class="row">
+            {% for product in fruits %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p>{{ product.description|truncatewords:10 }}</p>
+                            <p class="fw-bold">₹{{ product.price }}</p>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Meat</h2>
+        <div class="row">
+            {% for product in meat %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p>{{ product.description|truncatewords:10 }}</p>
+                            <p class="fw-bold">₹{{ product.price }}</p>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Bread</h2>
+        <div class="row">
+            {% for product in bread %}
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p>{{ product.description|truncatewords:10 }}</p>
+                            <p class="fw-bold">₹{{ product.price }}</p>
+                            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-outline-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+
+<!-- Price Calculation Script -->
+<script>
+    document.querySelectorAll('.quantity-select').forEach(select => {
+        select.addEventListener('change', function () {
+            const quantity = parseInt(this.value);
+            const unitPrice = parseFloat(this.dataset.price);
+            const totalPriceEl = this.closest('.card-body').querySelector('.total-price');
+            totalPriceEl.textContent = (quantity * unitPrice).toFixed(2);
+        });
+    });
+</script>
+
+<!-- Optional styling -->
+<style>
+    .btn-orange {
+        background-color: orange;
+        color: black;
+        border: none;
+    }
+    .btn-orange:hover {
+        background-color: darkorange;
+    }
+</style>
+
+{% endblock %}
