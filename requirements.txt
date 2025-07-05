@@ -8,7 +8,6 @@ Django==5.2.1
 filelock==3.18.0
 gunicorn==23.0.0
 idna==3.10
-mariadb==1.1.12
 mysqlclient==2.2.7
 omdb==0.10.1
 omdbapi==0.7.0
